@@ -88,6 +88,17 @@ export default {
             return this.sectionCtrl.get();
         }
     },
+    watch: {
+        show() {
+            if (this.show && this.$el) {
+                let height = this.$el.querySelector('.navbar-top').getBoundingClientRect().height;
+                wwLib.wwNavbar.updateHeight(height);
+            }
+            else {
+                wwLib.wwNavbar.updateHeight(0);
+            }
+        }
+    },
     methods: {
         init() {
             window.addEventListener('scroll', this.onScroll);
@@ -167,8 +178,7 @@ export default {
 
             const scrollPercent = Math.max(0, 100 * scrollTop / this.windowHeight) - 0.0001;
 
-            console.log(lastScrollTop)
-            this.show = (lastScrollTop > 5) ? scrollPercent < lastScrollTop : false
+            this.show = (lastScrollTop > 20) ? scrollPercent < lastScrollTop : false
 
             this.lastScrollTop = scrollPercent
         },
@@ -274,7 +284,7 @@ export default {
 </style>
 
 <style scoped lang="scss">
-$navbar-width: 400px;
+$navbar-width: 300px;
 
 .navbar_A {
     width: 100%;
