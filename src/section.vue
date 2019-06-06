@@ -108,6 +108,8 @@ export default {
 
             this.onResize();
 
+            wwLib.wwNavbar.updateOriginalHeight(this.show ? 70 : 0);
+
         },
 
         /*=============================================m_ÔÔ_m=============================================\
