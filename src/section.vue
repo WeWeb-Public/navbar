@@ -9,7 +9,7 @@
             <!-- wwManager:start -->
             <div class="placeholder-infos">
                 Placeholder for navbar_A
-                <br>Place navbar_A on top of the section list to hide this
+                <br />Place navbar_A on top of the section list to hide this
             </div>
             <!-- wwManager:end -->
         </div>
@@ -27,16 +27,14 @@
             </div>
         </div>
         <div class="navbar-side">
-            <div class="container">
-                <!-- wwManager:start -->
-                <wwSectionEditMenu size="small" :sectionCtrl="sectionCtrl" :options="openOptions"></wwSectionEditMenu>
-                <!-- wwManager:end -->
-                <wwObject class="background" :ww-object="section.data.backgroundSide" ww-category="background"></wwObject>
+            <!-- wwManager:start -->
+            <wwSectionEditMenu size="small" :sectionCtrl="sectionCtrl" :options="openOptions"></wwSectionEditMenu>
+            <!-- wwManager:end -->
+            <wwObject class="background" :ww-object="section.data.backgroundSide" ww-category="background"></wwObject>
 
-                <wwLayoutColumn tag="div" ww-default="ww-row" :ww-list="section.data.rowsSide" class="content" @ww-add="add(section.data.rowsSide, $event)" @ww-remove="remove(section.data.rowsSide, $event)">
-                    <wwObject v-for="row in section.data.rowsSide" :key="row.uniqueId" :ww-object="row"></wwObject>
-                </wwLayoutColumn>
-            </div>
+            <wwLayoutColumn tag="div" ww-default="ww-row" :ww-list="section.data.rowsSide" class="content" @ww-add="add(section.data.rowsSide, $event)" @ww-remove="remove(section.data.rowsSide, $event)">
+                <wwObject v-for="row in section.data.rowsSide" :key="row.uniqueId" :ww-object="row"></wwObject>
+            </wwLayoutColumn>
         </div>
         <div class="navbar-cover" :class="{'show': navbarOpen}" @click="toggleNavbar"></div>
     </div>
@@ -105,6 +103,7 @@ export default {
             window.addEventListener('resize', this.onResize);
 
             wwLib.$on('wwNavbar:toggle', this.toggleNavbar);
+            wwLib.$on('wwNavbar:close', this.closeNavbar);
 
             this.onResize();
 
@@ -121,18 +120,30 @@ export default {
                 for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                     section.classList.add('navbar_A-open');
                 }
+                for (let container of this.$el.querySelectorAll('.navbar-side')) {
+                    container.classList.add('navbar_A-open');
+                }
                 for (let container of this.$el.querySelectorAll('.container')) {
                     container.classList.add('navbar_A-open');
                 }
+                wwLib.getFrontWindow().html.classList.add('navbar_A-open-no-scoll');
             }
             else {
-                for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
-                    section.classList.remove('navbar_A-open');
-                }
-                for (let container of this.$el.querySelectorAll('.container')) {
-                    container.classList.remove('navbar_A-open');
-                }
+                this.closeNavbar();
             }
+        },
+        closeNavbar() {
+            this.navbarOpen = false;
+            for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
+                section.classList.remove('navbar_A-open');
+            }
+            for (let container of this.$el.querySelectorAll('.navbar-side')) {
+                container.classList.remove('navbar_A-open');
+            }
+            for (let container of this.$el.querySelectorAll('.container')) {
+                container.classList.remove('navbar_A-open');
+            }
+            wwLib.getFrontWindow().html.classList.remove('navbar_A-open-no-scoll');
         },
 
         /*=============================================m_ÔÔ_m=============================================\
@@ -271,6 +282,9 @@ export default {
         window.removeEventListener('resize', this.onResize);
 
         wwLib.$off('wwNavbar:toggle', this.toggleNavbar);
+        wwLib.$off('wwNavbar:close', this.closeNavbar);
+
+        this.closeNavbar();
     }
 };
 </script>
@@ -282,6 +296,10 @@ export default {
 
 .ww-section:not([ww-fixed]) {
     transition: transform 0.3s ease;
+}
+
+.navbar_A-open-no-scoll {
+    overflow-y: hidden;
 }
 </style>
 
@@ -375,36 +393,46 @@ $navbar-width: 300px;
         width: $navbar-width;
         z-index: 101;
         height: 100%;
+        transition: transform 0.3s ease;
 
-        .container {
-            width: 100%;
+        &.navbar_A-open {
+            transform: translateX(-$navbar-width);
+            pointer-events: all !important;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
             height: 100%;
-            transition: transform 0.3s ease;
+            width: 100%;
+        }
 
-            &.navbar_A-open {
-                transform: translateX(-$navbar-width);
-            }
+        .content {
+            position: relative;
+            max-height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
 
-            .background {
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 100%;
+            &::-webkit-scrollbar-thumb {
+                background-color: #808080;
             }
+            &::-webkit-scrollbar-track {
+                background-color: #ffffff00;
+            }
+            &::-webkit-scrollbar {
+                width: 5px;
+                background-color: #ffffff00;
+            }
+        }
 
-            .content {
-                position: relative;
-            }
-
-            .edit-menu-container {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 60px;
-                overflow-x: hidden;
-            }
+        .edit-menu-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            overflow-x: hidden;
         }
     }
 }
