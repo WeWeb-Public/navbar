@@ -126,7 +126,7 @@ export default {
                 for (let container of this.$el.querySelectorAll('.container')) {
                     container.classList.add('navbar_A-open');
                 }
-                wwLib.getFrontWindow().html.classList.add('navbar_A-open-no-scoll');
+                wwLib.getFrontDocument().querySelector('html').classList.add('navbar_A-open-no-scoll');
             }
             else {
                 this.closeNavbar();
@@ -143,7 +143,7 @@ export default {
             for (let container of this.$el.querySelectorAll('.container')) {
                 container.classList.remove('navbar_A-open');
             }
-            wwLib.getFrontWindow().html.classList.remove('navbar_A-open-no-scoll');
+            wwLib.getFrontDocument().querySelector('html').classList.remove('navbar_A-open-no-scoll');
         },
 
         /*=============================================m_ÔÔ_m=============================================\
