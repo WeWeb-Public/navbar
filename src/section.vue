@@ -121,13 +121,17 @@ export default {
             console.log('toggleNavbar')
             console.log(this.$el)
             this.navbarOpen = !this.navbarOpen;
+            console.log('navbarOpen', this.navbarOpen)
             if (this.navbarOpen) {
                 for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                     section.classList.add('navbar_A-open');
                 }
+                console.log('navbar-side', this.$el.querySelectorAll('.navbar-side'))
                 for (let container of this.$el.querySelectorAll('.navbar-side')) {
+                    console.log('container', container)
                     container.classList.add('navbar_A-open');
                 }
+                console.log('container', this.$el.querySelectorAll('container'))
                 for (let container of this.$el.querySelectorAll('.container')) {
                     container.classList.add('navbar_A-open');
                 }
