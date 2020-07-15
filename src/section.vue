@@ -88,6 +88,8 @@ export default {
     },
     watch: {
         show() {
+            console.log('show')
+
             if (this.show && this.$el) {
                 let height = this.$el.querySelector('.navbar-top').getBoundingClientRect().height;
                 wwLib.wwNavbar.updateHeight(height);
@@ -99,6 +101,7 @@ export default {
     },
     methods: {
         init() {
+            console.log('init')
             window.addEventListener('scroll', this.onScroll);
             window.addEventListener('resize', this.onResize);
 
@@ -115,6 +118,8 @@ export default {
           TOGGLE NAVBAR SIDE
         \================================================================================================*/
         toggleNavbar() {
+            console.log('toggleNavbar')
+            console.log(this.$el)
             this.navbarOpen = !this.navbarOpen;
             if (this.navbarOpen) {
                 for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
@@ -133,6 +138,7 @@ export default {
             }
         },
         closeNavbar() {
+            console.log('closeNavbar')
             this.navbarOpen = false;
             for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                 section.classList.remove('navbar_A-open');
@@ -150,6 +156,7 @@ export default {
           SHOW / HIDE NAVBAR TOP
         \================================================================================================*/
         onScroll() {
+            console.log('onScroll')
             if (this.section.data.appearPercent == -2) {
                 this.setScrollUp();
             } else if (this.section.data.appearPercent == -3) {
@@ -160,6 +167,7 @@ export default {
 
         },
         onResize() {
+            console.log('onResize')
             const e = document.documentElement;
             const g = document.getElementsByTagName('body')[0];
             this.windowHeight = window.innerHeight || e.clientHeight || g.clientHeight;
@@ -167,6 +175,7 @@ export default {
             this.onScroll()
         },
         setScrollPercent() {
+            console.log('setScrollPercent')
             if (this.section.data.appearPercent == null) {
                 this.show = true;
                 return;
@@ -185,6 +194,7 @@ export default {
             this.show = scrollPercent >= this.section.data.appearPercent;
         },
         setScrollUp() {
+            console.log('setScrollPercent')
 
             const lastScrollTop = this.lastScrollTop || 0
             const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
@@ -236,9 +246,11 @@ export default {
         /* wwManager:end */
     },
     mounted() {
+            console.log('mounted')
         this.init();
     },
     created() {
+            console.log('created')
 
         let needUpdate = false;
 
@@ -278,6 +290,8 @@ export default {
 
     },
     beforeDestroy() {
+            console.log('beforeDestroy')
+        
         window.removeEventListener('scroll', this.onScroll);
         window.removeEventListener('resize', this.onResize);
 
