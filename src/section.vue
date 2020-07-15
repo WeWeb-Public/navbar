@@ -88,8 +88,6 @@ export default {
     },
     watch: {
         show() {
-            console.log('show')
-
             if (this.show && this.$el) {
                 let height = this.$el.querySelector('.navbar-top').getBoundingClientRect().height;
                 wwLib.wwNavbar.updateHeight(height);
@@ -101,7 +99,6 @@ export default {
     },
     methods: {
         init() {
-            console.log('init')
             window.addEventListener('scroll', this.onScroll);
             window.addEventListener('resize', this.onResize);
 
@@ -111,27 +108,27 @@ export default {
             this.onResize();
 
             wwLib.wwNavbar.updateOriginalHeight(this.show ? 70 : 0);
-
         },
-
         /*=============================================m_ÔÔ_m=============================================\
           TOGGLE NAVBAR SIDE
         \================================================================================================*/
         toggleNavbar() {
             console.log('toggleNavbar')
-            console.log(this.$el)
             this.navbarOpen = !this.navbarOpen;
-            console.log('navbarOpen', this.navbarOpen)
             if (this.navbarOpen) {
                 for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                     section.classList.add('navbar_A-open');
                 }
                 console.log('navbar-side', this.$el.querySelectorAll('.navbar-side'))
                 for (let container of this.$el.querySelectorAll('.navbar-side')) {
-                    console.log('container', container)
                     container.classList.add('navbar_A-open');
+                    console.log('container', container)
                 }
-                console.log('container', this.$el.querySelectorAll('container'))
+                console.log('document navbar-side', document.querySelectorAll('.navbar-side'))
+                for (let container of document.querySelectorAll('.navbar-side')) {
+                    container.classList.add('navbar_A-open');
+                    console.log('container', container)
+                }
                 for (let container of this.$el.querySelectorAll('.container')) {
                     container.classList.add('navbar_A-open');
                 }
@@ -142,7 +139,6 @@ export default {
             }
         },
         closeNavbar() {
-            console.log('closeNavbar')
             this.navbarOpen = false;
             for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                 section.classList.remove('navbar_A-open');
@@ -160,7 +156,6 @@ export default {
           SHOW / HIDE NAVBAR TOP
         \================================================================================================*/
         onScroll() {
-            console.log('onScroll')
             if (this.section.data.appearPercent == -2) {
                 this.setScrollUp();
             } else if (this.section.data.appearPercent == -3) {
@@ -171,7 +166,6 @@ export default {
 
         },
         onResize() {
-            console.log('onResize')
             const e = document.documentElement;
             const g = document.getElementsByTagName('body')[0];
             this.windowHeight = window.innerHeight || e.clientHeight || g.clientHeight;
@@ -179,7 +173,6 @@ export default {
             this.onScroll()
         },
         setScrollPercent() {
-            console.log('setScrollPercent')
             if (this.section.data.appearPercent == null) {
                 this.show = true;
                 return;
@@ -198,8 +191,6 @@ export default {
             this.show = scrollPercent >= this.section.data.appearPercent;
         },
         setScrollUp() {
-            console.log('setScrollPercent')
-
             const lastScrollTop = this.lastScrollTop || 0
             const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
 
@@ -209,7 +200,6 @@ export default {
 
             this.lastScrollTop = scrollPercent
         },
-
         /*=============================================m_ÔÔ_m=============================================\
           ADD / REMOVE ROWS
         \================================================================================================*/
@@ -224,7 +214,6 @@ export default {
 
             this.sectionCtrl.update(this.section);
         },
-
         async openOptions() {
             let options = {
                 firstPage: 'NAVBAR_A_APPEAR_PERCENT',
@@ -234,7 +223,6 @@ export default {
             }
 
             try {
-
                 const result = await wwLib.wwPopups.open(options)
 
                 if (typeof (result.navbarAPercent) !== 'undefinded') {
@@ -242,20 +230,15 @@ export default {
                     this.sectionCtrl.update(this.section);
                     this.onScroll();
                 }
-
             } catch (error) {
-
             }
         }
         /* wwManager:end */
     },
     mounted() {
-            console.log('mounted')
         this.init();
     },
     created() {
-            console.log('created')
-
         let needUpdate = false;
 
         //Initialize section data
@@ -294,8 +277,6 @@ export default {
 
     },
     beforeDestroy() {
-            console.log('beforeDestroy')
-        
         window.removeEventListener('scroll', this.onScroll);
         window.removeEventListener('resize', this.onResize);
 
