@@ -13,8 +13,8 @@
             </div>
             <!-- wwManager:end -->
         </div>
-        <div class="navbar-top" :class="{'show': show, 'no-anim': section.data.appearPercent == null, 'fixed-nav': section.data.appearPercent != -3}">
-            <div class="container">
+        <div class="navbar-top" :class="{ show: show, 'no-anim': section.data.appearPercent == null, 'fixed-nav': section.data.appearPercent != -3 }">
+            <div class="container" :class="{ 'navbar_A-open': navbarOpen }">
                 <!-- wwManager:start -->
                 <wwSectionEditMenu size="small" :sectionCtrl="sectionCtrl" :options="openOptions"></wwSectionEditMenu>
                 <!-- wwManager:end -->
@@ -26,7 +26,7 @@
                 </wwLayoutColumn>
             </div>
         </div>
-        <div class="navbar-side">
+        <div class="navbar-side" :class="{ 'navbar_A-open': navbarOpen }">
             <!-- wwManager:start -->
             <wwSectionEditMenu size="small" :sectionCtrl="sectionCtrl" :options="openOptions"></wwSectionEditMenu>
             <!-- wwManager:end -->
@@ -36,7 +36,7 @@
                 <wwObject v-for="row in section.data.rowsSide" :key="row.uniqueId" :ww-object="row"></wwObject>
             </wwLayoutColumn>
         </div>
-        <div class="navbar-cover" :class="{'show': navbarOpen}" @click="toggleNavbar"></div>
+        <div class="navbar-cover" :class="{ show: navbarOpen }" @click="toggleNavbar"></div>
     </div>
 </template>
 
@@ -44,39 +44,39 @@
 <!-- ✨ Here comes the magic ✨ -->
 <script>
 /* wwManager:start */
-import navbarAAppearPercent from './navbarAAppearPercent.vue'
+import navbarAAppearPercent from './navbarAAppearPercent.vue';
 wwLib.wwPopups.addPopup('navbarAAppearPercent', navbarAAppearPercent);
 wwLib.wwPopups.addStory('NAVBAR_A_APPEAR_PERCENT', {
     title: {
         en: 'Scroll appear percent',
-        fr: 'Pourcentage de scroll avant apparition'
+        fr: 'Pourcentage de scroll avant apparition',
     },
     type: 'navbarAAppearPercent',
     buttons: {
         FINISH: {
             text: {
                 en: 'Finish',
-                fr: 'Terminer'
+                fr: 'Terminer',
             },
-            next: false
-        }
-    }
+            next: false,
+        },
+    },
 });
 /* wwManager:end */
 
 export default {
-    name: "__COMPONENT_NAME__",
+    name: '__COMPONENT_NAME__',
     props: {
         // The section controller object is passed to you.
-        sectionCtrl: Object
+        sectionCtrl: Object,
     },
     data() {
         return {
             windowHeight: 0,
             show: false,
             navbarOpen: false,
-            lastScrollTop: 0
-        }
+            lastScrollTop: 0,
+        };
     },
     computed: {
         //Get the section object here !
@@ -84,18 +84,17 @@ export default {
         // Use it has you like !
         section() {
             return this.sectionCtrl.get();
-        }
+        },
     },
     watch: {
         show() {
             if (this.show && this.$el) {
                 let height = this.$el.querySelector('.navbar-top').getBoundingClientRect().height;
                 wwLib.wwNavbar.updateHeight(height);
-            }
-            else {
+            } else {
                 wwLib.wwNavbar.updateHeight(0);
             }
-        }
+        },
     },
     methods: {
         init() {
@@ -113,28 +112,16 @@ export default {
           TOGGLE NAVBAR SIDE
         \================================================================================================*/
         toggleNavbar() {
-            console.log('toggleNavbar')
             this.navbarOpen = !this.navbarOpen;
             if (this.navbarOpen) {
                 for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                     section.classList.add('navbar_A-open');
                 }
-                console.log('navbar-side', this.$el.querySelectorAll('.navbar-side'))
-                for (let container of this.$el.querySelectorAll('.navbar-side')) {
-                    container.classList.add('navbar_A-open');
-                    console.log('container', container)
-                }
-                console.log('document navbar-side', document.querySelectorAll('.navbar-side'))
-                for (let container of document.querySelectorAll('.navbar-side')) {
-                    container.classList.add('navbar_A-open');
-                    console.log('container', container)
-                }
-                for (let container of this.$el.querySelectorAll('.container')) {
-                    container.classList.add('navbar_A-open');
-                }
-                wwLib.getFrontDocument().querySelector('html').classList.add('navbar_A-open-no-scoll');
-            }
-            else {
+                wwLib
+                    .getFrontDocument()
+                    .querySelector('html')
+                    .classList.add('navbar_A-open-no-scoll');
+            } else {
                 this.closeNavbar();
             }
         },
@@ -143,13 +130,10 @@ export default {
             for (let section of document.querySelectorAll('.ww-section:not([ww-fixed])')) {
                 section.classList.remove('navbar_A-open');
             }
-            for (let container of this.$el.querySelectorAll('.navbar-side')) {
-                container.classList.remove('navbar_A-open');
-            }
-            for (let container of this.$el.querySelectorAll('.container')) {
-                container.classList.remove('navbar_A-open');
-            }
-            wwLib.getFrontDocument().querySelector('html').classList.remove('navbar_A-open-no-scoll');
+            wwLib
+                .getFrontDocument()
+                .querySelector('html')
+                .classList.remove('navbar_A-open-no-scoll');
         },
 
         /*=============================================m_ÔÔ_m=============================================\
@@ -163,14 +147,13 @@ export default {
             } else {
                 this.setScrollPercent();
             }
-
         },
         onResize() {
             const e = document.documentElement;
             const g = document.getElementsByTagName('body')[0];
             this.windowHeight = window.innerHeight || e.clientHeight || g.clientHeight;
 
-            this.onScroll()
+            this.onScroll();
         },
         setScrollPercent() {
             if (this.section.data.appearPercent == null) {
@@ -180,7 +163,7 @@ export default {
 
             const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
 
-            let scrollPercent = Math.max(0, 100 * scrollTop / this.windowHeight) - 0.0001;
+            let scrollPercent = Math.max(0, (100 * scrollTop) / this.windowHeight) - 0.0001;
 
             /*
             if (this.windowHeight + scrollTop >= document.body.clientHeight) {
@@ -191,14 +174,14 @@ export default {
             this.show = scrollPercent >= this.section.data.appearPercent;
         },
         setScrollUp() {
-            const lastScrollTop = this.lastScrollTop || 0
+            const lastScrollTop = this.lastScrollTop || 0;
             const scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
 
-            const scrollPercent = Math.max(0, 100 * scrollTop / this.windowHeight) - 0.0001;
+            const scrollPercent = Math.max(0, (100 * scrollTop) / this.windowHeight) - 0.0001;
 
-            this.show = (lastScrollTop > 20) ? scrollPercent < lastScrollTop : false
+            this.show = lastScrollTop > 20 ? scrollPercent < lastScrollTop : false;
 
-            this.lastScrollTop = scrollPercent
+            this.lastScrollTop = scrollPercent;
         },
         /*=============================================m_ÔÔ_m=============================================\
           ADD / REMOVE ROWS
@@ -218,21 +201,20 @@ export default {
             let options = {
                 firstPage: 'NAVBAR_A_APPEAR_PERCENT',
                 data: {
-                    navbarAPercent: this.section.data.appearPercent
+                    navbarAPercent: this.section.data.appearPercent,
                 },
-            }
+            };
 
             try {
-                const result = await wwLib.wwPopups.open(options)
+                const result = await wwLib.wwPopups.open(options);
 
-                if (typeof (result.navbarAPercent) !== 'undefinded') {
+                if (typeof result.navbarAPercent !== 'undefinded') {
                     this.section.data.appearPercent = result.navbarAPercent;
                     this.sectionCtrl.update(this.section);
                     this.onScroll();
                 }
-            } catch (error) {
-            }
-        }
+            } catch (error) {}
+        },
         /* wwManager:end */
     },
     mounted() {
@@ -267,14 +249,11 @@ export default {
             needUpdate = true;
         }
 
-
         if (needUpdate) {
             this.sectionCtrl.update(this.section);
         }
 
-
         this.onResize();
-
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.onScroll);
@@ -284,7 +263,7 @@ export default {
         wwLib.$off('wwNavbar:close', this.closeNavbar);
 
         this.closeNavbar();
-    }
+    },
 };
 </script>
 
