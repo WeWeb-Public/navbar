@@ -389,6 +389,7 @@ $navbar-width: 300px;
         .content {
             position: relative;
             max-height: 100%;
+            min-height: 100%;
             overflow-y: auto;
             overflow-x: hidden;
 
